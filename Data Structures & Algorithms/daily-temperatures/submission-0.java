@@ -1,43 +1,23 @@
 class Solution {
-    public int[] asteroidCollision(int[] asteroids) {
+    public int[] dailyTemperatures(int[] temperatures) {
+
+        int n = temperatures.length;
+        int[] result = new int[n];
 
         Stack<Integer> stack = new Stack<>();
 
-        for (int asteroid : asteroids) {
+        for (int i = 0; i < n; i++) {
 
-            boolean alive = true;
+            while (!stack.isEmpty() &&
+                   temperatures[i] > temperatures[stack.peek()]) {
 
-            while (alive &&
-                   asteroid < 0 &&
-                   !stack.isEmpty() &&
-                   stack.peek() > 0) {
-
-                if (stack.peek() < -asteroid) {
-                    // Top asteroid explodes
-                    stack.pop();
-                }
-                else if (stack.peek() == -asteroid) {
-                    // Both explode
-                    stack.pop();
-                    alive = false;
-                }
-                else {
-                    // Current asteroid explodes
-                    alive = false;
-                }
+                int index = stack.pop();
+                result[index] = i - index;
             }
 
-            if (alive) {
-                stack.push(asteroid);
-            }
+            stack.push(i);
         }
 
-        int[] ans = new int[stack.size()];
-
-        for (int i = stack.size() - 1; i >= 0; i--) {
-            ans[i] = stack.pop();
-        }
-
-        return ans;
+        return result;
     }
 }
