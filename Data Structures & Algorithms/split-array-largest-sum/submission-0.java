@@ -1,0 +1,53 @@
+class Solution {
+    public int splitArray(int[] nums, int k) {
+
+        int left = 0;
+        int right = 0;
+
+        // Find search range
+        for (int num : nums) {
+            left = Math.max(left, num);
+            right += num;
+        }
+
+        // Binary search
+        while (left < right) {
+
+            int mid = left + (right - left) / 2;
+
+            if (canSplit(nums, k, mid)) {
+                // mid works, try a smaller answer
+                right = mid;
+            } else {
+                // mid doesn't work, need a larger answer
+                left = mid + 1;
+            }
+        }
+
+        return left;
+    }
+
+    private boolean canSplit(int[] nums, int k, int maxSum) {
+
+        int subarrays = 1;
+        int currentSum = 0;
+
+        for (int num : nums) {
+
+            if (currentSum + num > maxSum) {
+                // Start a new subarray
+                subarrays++;
+                currentSum = num;
+
+                if (subarrays > k) {
+                    return false;
+                }
+
+            } else {
+                currentSum += num;
+            }
+        }
+
+        return true;
+    }
+}
